@@ -1,11 +1,48 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import {
+	NavBar,
+	Hero,
+	LandingInteractions,
+	CTA,
+	Faq,
+	Footer,
+	Process,
+	Services,
+	Stats,
+	Work,
+} from "../components";
+import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout>
-	<Welcome />
+	<!-- ===== NAV ===== -->
+	<NavBar client:only="react" />
+
+	<a id="top"></a>
+
+	<!-- ===== HERO ===== -->
+	<Hero client:only="react" />
+
+	<!-- ===== STATS ===== -->
+	<Stats client:only="react" />
+
+	<!-- ===== SERVICES ===== -->
+	<Services client:only="react" />
+
+	<!-- ===== PROCESS ===== -->
+	<Process client:only="react" />
+
+	<!-- ===== WORK ===== -->
+	<Work client:only="react" />
+
+	<!-- ===== FAQ ===== -->
+	<Faq client:only="react" />
+
+	<!-- ===== CONTACT / CTA ===== -->
+	<CTA client:only="react" />
+
+	<!-- ===== FOOTER ===== -->
+	<Footer client:only="react" />
+
+	<LandingInteractions client:only="react" />
 </Layout>

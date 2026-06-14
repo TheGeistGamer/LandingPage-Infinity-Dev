@@ -1,12 +1,89 @@
+---
+import '../theme/global.css'
+
+interface Props {
+	title?: string;
+	description?: string;
+	canonical?: string;
+	image?: string;
+	type?: 'website' | 'article';
+	noindex?: boolean;
+}
+
+const {
+	title = 'Infinity Dev - Software a tu medida',
+	description = 'Disenamos y construimos software a medida para negocios que necesitan aplicaciones web, apps moviles, servidores, dashboards y productos digitales listos para crecer.',
+	canonical,
+	image = '/logo_basic.webp',
+	type = 'website',
+	noindex = false,
+} = Astro.props;
+
+const siteUrl = Astro.site ?? new URL('https://infinitydev.io');
+const canonicalUrl = new URL(canonical ?? Astro.url.pathname, siteUrl);
+const imageUrl = new URL(image, siteUrl);
+const locale = 'es_MX';
+const alternateLocale = 'en_US';
+
+const organizationJsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'Organization',
+	name: 'Infinity Dev',
+	url: siteUrl.toString(),
+	logo: new URL('/logo-basic.svg', siteUrl).toString(),
+	description,
+	sameAs: [],
+	knowsAbout: [
+		'Desarrollo de software a medida',
+		'Aplicaciones web',
+		'Aplicaciones moviles',
+		'Backend',
+		'Dashboards empresariales',
+	],
+};
+---
+
 <!doctype html>
-<html lang="en">
+<html lang="es">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
+		<meta name="author" content="Infinity Dev" />
+		<meta name="creator" content="Infinity Dev" />
+		<meta name="publisher" content="Infinity Dev" />
+		<meta name="theme-color" content="#111827" />
+		<meta name="color-scheme" content="light" />
+		<meta
+			name="keywords"
+			content="desarrollo de software, software a medida, aplicaciones web, apps moviles, backend, dashboards, Infinity Dev"
+		/>
+
+		<link rel="canonical" href={canonicalUrl.toString()} />
+		<link rel="icon" type="image/svg+xml" href="/logo-basic.svg" />
+		<link rel="apple-touch-icon" href="/logo_basic.webp" />
+
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:type" content={type} />
+		<meta property="og:url" content={canonicalUrl.toString()} />
+		<meta property="og:image" content={imageUrl.toString()} />
+		<meta property="og:image:alt" content="Logo de Infinity Dev" />
+		<meta property="og:site_name" content="Infinity Dev" />
+		<meta property="og:locale" content={locale} />
+		<meta property="og:locale:alternate" content={alternateLocale} />
+
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={imageUrl.toString()} />
+		<meta name="twitter:image:alt" content="Logo de Infinity Dev" />
+
+		<script type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)} />
 	</head>
 	<body>
 		<slot />
