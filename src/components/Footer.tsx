@@ -8,7 +8,7 @@ export const Footer = () => {
           <div className="foot-brand">
             <a href="#top" className="brand">
               <img
-                src="assets/infinity-mark.png"
+                src="/logo_basic.webp"
                 alt="Infinity Dev"
                 style={{ width: '38px', height: '38px' }}
               />
