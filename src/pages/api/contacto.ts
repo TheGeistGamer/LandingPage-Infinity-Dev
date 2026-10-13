@@ -22,13 +22,17 @@ const clean = (value: unknown, max: number) =>
 const EMAIL = /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]{2,}$/
 
 const verifyTurnstile = async (token: string, ip: string | null) => {
-  const body = new URLSearchParams({ secret: String(env.TURNSTILE_SECRET_KEY ?? ''), response: token })
+  const secret = String(env.TURNSTILE_SECRET_KEY ?? '').trim()
+
+  if (!secret) return { success: false, codes: ['missing-secret-in-worker'] }
+
+  const body = new URLSearchParams({ secret, response: token })
   if (ip) body.set('remoteip', ip)
 
   const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', { method: 'POST', body })
-  const result = (await response.json()) as { success?: boolean }
+  const result = (await response.json()) as { success?: boolean; 'error-codes'?: string[] }
 
-  return result.success === true
+  return { success: result.success === true, codes: result['error-codes'] ?? [] }
 }
 
 const sendEmail = async (payload: Record<string, unknown>) => {
@@ -134,7 +138,13 @@ export const POST: APIRoute = async ({ request }) => {
 
   const ip = request.headers.get('cf-connecting-ip')
 
-  if (!token || !(await verifyTurnstile(token, ip))) return json({ ok: false, error: 'captcha' }, 403)
+  const verification = token ? await verifyTurnstile(token, ip) : { success: false, codes: ['missing-token'] }
+
+  if (!verification.success) {
+    console.error('Turnstile rechazó la solicitud', verification.codes)
+    // Los códigos de error son genéricos (no contienen secretos) y ayudan a diagnosticar la configuración
+    return json({ ok: false, error: 'captcha', codes: verification.codes }, 403)
+  }
 
   const service = SERVICES[serviceKey].es
   const owner = ownerEmail({ name, company, email, service, message, lang })
