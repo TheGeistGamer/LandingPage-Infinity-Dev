@@ -1,4 +1,4 @@
-import React from 'react'
+import { langPrefix, type Lang } from './i18n'
 
 /** Agrega aquí la URL de cada red cuando exista; mientras esté vacía no se muestra el ícono */
 const socialLinks: Record<'X' | 'LinkedIn' | 'Instagram', string> = {
@@ -7,13 +7,15 @@ const socialLinks: Record<'X' | 'LinkedIn' | 'Instagram', string> = {
   Instagram: '',
 }
 
-export const Footer = () => {
+export const Footer = ({ lang = 'es' }: { lang?: Lang }) => {
+  const p = langPrefix(lang)
+
   return (
     <footer>
       <div className="wrap">
         <div className="foot-grid">
           <div className="foot-brand">
-            <a href="/#top" className="brand">
+            <a href={`${p}/#top`} className="brand">
               <img
                 src="/logo_basic.webp"
                 alt="Infinity Dev"
@@ -33,39 +35,39 @@ export const Footer = () => {
           </div>
           <div className="foot-col">
             <h5><span data-es>Servicios</span><span data-en>Services</span></h5>
-            <a href="/#servicios"
+            <a href={`${p}/#servicios`}
             ><span data-es>Aplicaciones web</span><span data-en>Web apps</span
             ></a
             >
-            <a href="/#servicios"
+            <a href={`${p}/#servicios`}
             ><span data-es>Apps móviles</span><span data-en>Mobile apps</span
             ></a
             >
-            <a href="/#servicios"
+            <a href={`${p}/#servicios`}
             ><span data-es>Servidores</span><span data-en>Servers</span></a
             >
-            <a href="/#servicios">Dashboards</a>
+            <a href={`${p}/#servicios`}>Dashboards</a>
           </div>
           <div className="foot-col">
             <h5><span data-es>Empresa</span><span data-en>Company</span></h5>
-            <a href="/#proceso"
+            <a href={`${p}/#proceso`}
             ><span data-es>Proceso</span><span data-en>Process</span></a
             >
-            <a href="/#trabajo"
+            <a href={`${p}/#trabajo`}
             ><span data-es>Portafolio</span><span data-en>Work</span></a
             >
-            <a href="/trabajos"
+            <a href={`${p}/trabajos`}
             ><span data-es>Todos los trabajos</span><span data-en>All work</span></a
             >
-            <a href="/#faq">FAQ</a>
-            <a href="/#contacto"
+            <a href={`${p}/#faq`}>FAQ</a>
+            <a href={`${p}/#contacto`}
             ><span data-es>Contacto</span><span data-en>Contact</span></a
             >
           </div>
           <div className="foot-col">
             <h5><span data-es>Contacto</span><span data-en>Contact</span></h5>
             <a href="mailto:contacto@infinitydev.agency">contacto@infinitydev.agency</a>
-            <a href="/#contacto"
+            <a href={`${p}/#contacto`}
             ><span data-es>Cotizar proyecto</span><span data-en
             >Get a quote</span
               ></a

@@ -1,11 +1,11 @@
 import { useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import type { Detail } from '../data/projects'
-import { T, currentLang } from './i18n'
+import { Lx, T, useLang } from './i18n'
 
 export const ProjectModal = ({ project, onClose }: { project: Detail; onClose: () => void }) => {
   const closeRef = useRef<HTMLButtonElement>(null)
-  const lang = currentLang()
+  const lang = useLang() ?? 'es'
 
   useEffect(() => {
     const previous = document.activeElement as HTMLElement | null
@@ -32,7 +32,7 @@ export const ProjectModal = ({ project, onClose }: { project: Detail; onClose: (
 
   return createPortal(
     <div className="pj-backdrop" onClick={onClose}>
-      <button ref={closeRef} className="pj-close" onClick={onClose} aria-label="Cerrar / Close">
+      <button ref={closeRef} className="pj-close" onClick={onClose} aria-label={lang === 'en' ? 'Close' : 'Cerrar'}>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
           <path d="M6 6l12 12M18 6L6 18" />
         </svg>
@@ -93,7 +93,7 @@ export const ProjectModal = ({ project, onClose }: { project: Detail; onClose: (
           ))}
 
           <section className="pj-services">
-            <h4><span data-es>Lo que entregamos</span><span data-en>What we delivered</span></h4>
+            <h4><Lx es={<>Lo que entregamos</>} en={<>What we delivered</>} /></h4>
             <ul>
               {project.services.map((s) => (
                 <li key={s.es}><T t={s} /></li>
@@ -102,7 +102,7 @@ export const ProjectModal = ({ project, onClose }: { project: Detail; onClose: (
           </section>
 
           <details className="pj-tech">
-            <summary><span data-es>Ficha técnica</span><span data-en>Tech sheet</span></summary>
+            <summary><Lx es={<>Ficha técnica</>} en={<>Tech sheet</>} /></summary>
             <dl>
               {project.tech.map((r) => (
                 <div key={r.k.es}>
@@ -116,14 +116,13 @@ export const ProjectModal = ({ project, onClose }: { project: Detail; onClose: (
 
         <footer className="pj-cta">
           <div>
-            <h4><span data-es>¿Tienes un proyecto en mente?</span><span data-en>Have a project in mind?</span></h4>
+            <h4><Lx es={<>¿Tienes un proyecto en mente?</>} en={<>Have a project in mind?</>} /></h4>
             <p>
-              <span data-es>Cuéntanos tu idea y la convertimos en un producto como este.</span>
-              <span data-en>Tell us your idea and we will turn it into a product like this.</span>
+              <Lx es={<>Cuéntanos tu idea y la convertimos en un producto como este.</>} en={<>Tell us your idea and we will turn it into a product like this.</>} />
             </p>
           </div>
           <button className="btn btn-primary btn-lg" onClick={goContact}>
-            <span data-es>Cotiza tu proyecto</span><span data-en>Quote your project</span>
+            <Lx es={<>Cotiza tu proyecto</>} en={<>Quote your project</>} />
           </button>
         </footer>
       </div>

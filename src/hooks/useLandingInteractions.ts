@@ -2,22 +2,10 @@ import { useEffect } from 'react';
 
 type Language = 'es' | 'en';
 
-const LANGUAGE_STORAGE_KEY = 'idev_lang';
+const getPageLanguage = (): Language => (document.documentElement.lang === 'en' ? 'en' : 'es');
 
-const getSavedLanguage = (): Language => {
-  if (typeof window === 'undefined') return 'es';
-
-  return localStorage.getItem(LANGUAGE_STORAGE_KEY) === 'en' ? 'en' : 'es';
-};
-
+/** El idioma lo define la ruta (/ y /en); aquí solo se traducen las opciones de los select */
 const applyLanguage = (language: Language) => {
-  document.body.classList.toggle('en', language === 'en');
-  document.documentElement.lang = language;
-
-  document.querySelectorAll<HTMLButtonElement>('#lang button').forEach((button) => {
-    button.classList.toggle('active', button.dataset.lang === language);
-  });
-
   document.querySelectorAll<HTMLOptionElement>('option[data-es-text]').forEach((option) => {
     const text = language === 'en' ? option.dataset.enText ?? '' : option.dataset.esText ?? '';
 
@@ -25,8 +13,6 @@ const applyLanguage = (language: Language) => {
       option.textContent = text;
     }
   });
-
-  localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
 };
 
 const buildMobileMenu = (open: boolean) => {
@@ -131,7 +117,7 @@ const checkReveals = () => {
 
 export const useLandingInteractions = () => {
   useEffect(() => {
-    let language = getSavedLanguage();
+    const language = getPageLanguage();
     let languageUpdateFrame: number | null = null;
     const timers: number[] = [];
 
@@ -143,13 +129,6 @@ export const useLandingInteractions = () => {
     const handleClick = (event: MouseEvent) => {
       const target = event.target instanceof Element ? event.target : null;
       if (!target) return;
-
-      const languageButton = target.closest<HTMLButtonElement>('#lang button[data-lang]');
-      if (languageButton?.dataset.lang === 'es' || languageButton?.dataset.lang === 'en') {
-        language = languageButton.dataset.lang;
-        applyLanguage(language);
-        return;
-      }
 
       if (target.closest('#burger')) {
         const open = document.body.classList.toggle('menu-open');

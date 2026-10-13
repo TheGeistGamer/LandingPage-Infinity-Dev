@@ -11,17 +11,44 @@ interface Props {
 	noindex?: boolean;
 	/** Datos estructurados extra de la página (se suman a Organization y WebSite) */
 	jsonLd?: Record<string, unknown>[];
+	/** Idioma de la página: el español vive en la raíz y el inglés en /en */
+	lang?: 'es' | 'en';
+	/** Ruta equivalente en cada idioma, para <link rel="alternate" hreflang> */
+	alternates?: { es: string; en: string };
 }
 
 const SITE_NAME = 'Infinity Dev';
 const EMAIL = 'contacto@infinitydev.agency';
 
+const copy = {
+	es: {
+		title: 'Infinity Dev | Desarrollo de software a medida, apps y dashboards',
+		description:
+			'Diseñamos y desarrollamos apps web y móviles, servidores y dashboards a la medida de tu negocio. Sin plantillas: producto propio, de la idea al lanzamiento.',
+		imageAlt: 'Infinity Dev: software único, hecho para tu historia',
+		skip: 'Saltar al contenido',
+		locale: 'es_MX',
+		otherLocale: 'en_US',
+	},
+	en: {
+		title: 'Infinity Dev | Custom software development, apps and dashboards',
+		description:
+			'We design and build web and mobile apps, servers and dashboards tailored to your business. No templates: a product of your own, from idea to launch.',
+		imageAlt: 'Infinity Dev: unique software, built for your story',
+		skip: 'Skip to content',
+		locale: 'en_US',
+		otherLocale: 'es_MX',
+	},
+};
+
 const {
-	title = 'Infinity Dev | Desarrollo de software a medida, apps y dashboards',
-	description = 'Diseñamos y desarrollamos apps web y móviles, servidores y dashboards a la medida de tu negocio. Sin plantillas: producto propio, de la idea al lanzamiento.',
+	lang = 'es',
+	alternates,
+	title = copy[lang].title,
+	description = copy[lang].description,
 	canonical,
 	image = '/og-image.jpg',
-	imageAlt = 'Infinity Dev: software único, hecho para tu historia',
+	imageAlt = copy[lang].imageAlt,
 	type = 'website',
 	noindex = false,
 	jsonLd = [],
@@ -31,6 +58,10 @@ const siteUrl = Astro.site ?? new URL('https://infinitydev.agency');
 const canonicalUrl = new URL(canonical ?? Astro.url.pathname, siteUrl);
 const imageUrl = new URL(image, siteUrl);
 const isDefaultImage = image === '/og-image.jpg';
+
+const alternateUrls = alternates
+	? { es: new URL(alternates.es, siteUrl).toString(), en: new URL(alternates.en, siteUrl).toString() }
+	: undefined;
 
 const organizationId = new URL('/#organization', siteUrl).toString();
 
@@ -76,7 +107,7 @@ const structuredData = [...baseJsonLd, ...jsonLd];
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang={lang}>
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -95,6 +126,9 @@ const structuredData = [...baseJsonLd, ...jsonLd];
 		<meta name="format-detection" content="telephone=no" />
 
 		<link rel="canonical" href={canonicalUrl.toString()} />
+		{alternateUrls && <link rel="alternate" hreflang="es" href={alternateUrls.es} />}
+		{alternateUrls && <link rel="alternate" hreflang="en" href={alternateUrls.en} />}
+		{alternateUrls && <link rel="alternate" hreflang="x-default" href={alternateUrls.es} />}
 		<link rel="sitemap" type="application/xml" href="/sitemap.xml" />
 		<link rel="icon" type="image/svg+xml" href="/logo-basic.svg" />
 		<link rel="apple-touch-icon" href="/logo_basic.webp" />
@@ -116,8 +150,8 @@ const structuredData = [...baseJsonLd, ...jsonLd];
 		{isDefaultImage && <meta property="og:image:type" content="image/jpeg" />}
 		<meta property="og:image:alt" content={imageAlt} />
 		<meta property="og:site_name" content={SITE_NAME} />
-		<meta property="og:locale" content="es_MX" />
-		<meta property="og:locale:alternate" content="en_US" />
+		<meta property="og:locale" content={copy[lang].locale} />
+		<meta property="og:locale:alternate" content={copy[lang].otherLocale} />
 
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:title" content={title} />
@@ -136,8 +170,8 @@ const structuredData = [...baseJsonLd, ...jsonLd];
 			</style>
 		</noscript>
 	</head>
-	<body>
-		<a href="#main" class="skip-link">Saltar al contenido</a>
+	<body class={lang === 'en' ? 'en' : undefined}>
+		<a href="#main" class="skip-link">{copy[lang].skip}</a>
 		<slot />
 	</body>
 </html>

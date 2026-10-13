@@ -86,6 +86,8 @@ header.nav{position:fixed;top:0;left:0;right:0;z-index:100;transition:all .35s v
   background:none;border:none;padding:7px 11px;cursor:pointer;color:var(--muted);transition:all .2s;
 }
 .lang button.active{background:var(--ink);color:#fff}
+.lang a{display:block;padding:7px 11px;color:var(--muted);transition:all .2s}
+.lang a.active{background:var(--ink);color:#fff}
 .nav-cta{}
 .burger{display:none;background:none;border:1px solid var(--line);border-radius:12px;width:42px;height:42px;cursor:pointer;align-items:center;justify-content:center}
 .burger span{display:block;width:18px;height:2px;background:var(--ink);position:relative}
@@ -455,5 +457,5 @@ body.en [data-en]{display:revert}
   .nav-right{gap:6px}
   .nav-cta{padding:8px 11px;font-size:.78rem}
   .burger{width:34px;height:34px}
-  .lang button{padding:6px 9px;font-size:.74rem}
+  .lang button,.lang a{padding:6px 9px;font-size:.74rem}
 }

@@ -3,7 +3,7 @@ import { projects } from '../data/projects'
 import { productDetail } from '../data/productDetails'
 import { filterLabels, kindLabels, products, type ProductKind } from '../data/products'
 import { ProjectModal } from './ProjectModal'
-import { T } from './i18n'
+import { LangContext, Lx, T, langPrefix, type Lang } from './i18n'
 
 type Filter = 'all' | ProductKind
 
@@ -30,7 +30,7 @@ const writeUrl = (filter: Filter, page: number) => {
   window.history.replaceState(null, '', `${window.location.pathname}${query ? `?${query}` : ''}`)
 }
 
-export const AllWork = () => {
+export const AllWork = ({ lang = 'es' }: { lang?: Lang }) => {
   const [filter, setFilter] = useState<Filter>('all')
   const [page, setPage] = useState(1)
   const [openId, setOpenId] = useState<string | null>(null)
@@ -66,33 +66,32 @@ export const AllWork = () => {
   const countFor = (f: Filter) => (f === 'all' ? products.length : products.filter((p) => p.kind === f).length)
 
   return (
+    <LangContext.Provider value={lang}>
     <section className="sec aw" id="catalogo">
       <div className="wrap">
         <div className="sec-head">
-          <a href="/#trabajo" className="aw-back">
+          <a href={`${langPrefix(lang)}/#trabajo`} className="aw-back">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M19 12H5M11 6l-6 6 6 6" />
             </svg>
-            <span data-es>Volver al inicio</span><span data-en>Back to home</span>
+            <Lx es={<>Volver al inicio</>} en={<>Back to home</>} />
           </a>
           <span className="eyebrow">
-            <span data-es>Todos los trabajos</span><span data-en>All work</span>
+            <Lx es={<>Todos los trabajos</>} en={<>All work</>} />
           </span>
           <h1>
-            <span data-es>Cada producto,<br />por separado.</span>
-            <span data-en>Every product,<br />on its own.</span>
+            <Lx es={<>Cada producto,<br />por separado.</>} en={<>Every product,<br />on its own.</>} />
           </h1>
           <p>
-            <span data-es>
+            <Lx es={<>
               Apps, sitios y paneles que hemos construido, listados uno por uno. Abre cualquiera para ver el proyecto completo.
-            </span>
-            <span data-en>
+            </>} en={<>
               Apps, websites and admin panels we have built, listed one by one. Open any of them to see the whole project.
-            </span>
+            </>} />
           </p>
         </div>
 
-        <div className="aw-filters" role="tablist" aria-label="Filtro">
+        <div className="aw-filters" role="tablist" aria-label={lang === 'en' ? 'Filter' : 'Filtro'}>
           {FILTERS.map((f) => (
             <button
               key={f}
@@ -120,7 +119,7 @@ export const AllWork = () => {
                   className="aw-art"
                   style={{ background: project.tone }}
                   onClick={() => setOpenId(product.id)}
-                  aria-label={`${product.name.es} / ${product.name.en}`}
+                  aria-label={product.name[lang]}
                 >
                   <div className={`work-cover ${product.images[0].kind}`} aria-hidden="true">
                     {product.images.map((img, i) => (
@@ -140,7 +139,7 @@ export const AllWork = () => {
                   <div className="aw-meta">
                     <span className={`aw-kind k-${product.kind}`}><T t={kindLabels[product.kind]} /></span>
                     <span className="aw-from">
-                      <span data-es>Proyecto: </span><span data-en>Project: </span>
+                      <Lx es={<>Proyecto: </>} en={<>Project: </>} />
                       <T t={project.title} />
                     </span>
                   </div>
@@ -153,7 +152,7 @@ export const AllWork = () => {
                   </ul>
                   <div className="aw-actions">
                     <button type="button" className="btn btn-primary" onClick={() => setOpenId(product.id)}>
-                      <span data-es>Ver el proyecto</span><span data-en>View project</span>
+                      <Lx es={<>Ver el proyecto</>} en={<>View project</>} />
                     </button>
                     {product.link && (
                       <a className="btn btn-ghost" href={product.link.href} target="_blank" rel="noopener noreferrer">
@@ -168,8 +167,8 @@ export const AllWork = () => {
         </ul>
 
         {pages > 1 && (
-          <nav className="aw-pager" aria-label="Paginación">
-            <button type="button" className="aw-pg" disabled={current === 1} onClick={() => goPage(current - 1)} aria-label="Anterior / Previous">
+          <nav className="aw-pager" aria-label={lang === 'en' ? 'Pagination' : 'Paginación'}>
+            <button type="button" className="aw-pg" disabled={current === 1} onClick={() => goPage(current - 1)} aria-label={lang === 'en' ? 'Previous' : 'Anterior'}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M15 6l-6 6 6 6" />
               </svg>
@@ -185,7 +184,7 @@ export const AllWork = () => {
                 {n}
               </button>
             ))}
-            <button type="button" className="aw-pg" disabled={current === pages} onClick={() => goPage(current + 1)} aria-label="Siguiente / Next">
+            <button type="button" className="aw-pg" disabled={current === pages} onClick={() => goPage(current + 1)} aria-label={lang === 'en' ? 'Next' : 'Siguiente'}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M9 6l6 6-6 6" />
               </svg>
@@ -194,12 +193,12 @@ export const AllWork = () => {
         )}
 
         <p className="aw-count">
-          <span data-es>Mostrando {slice.length} de {visible.length} productos</span>
-          <span data-en>Showing {slice.length} of {visible.length} products</span>
+          <Lx es={<>Mostrando {slice.length} de {visible.length} productos</>} en={<>Showing {slice.length} of {visible.length} products</>} />
         </p>
       </div>
 
       {active && <ProjectModal project={active} onClose={close} />}
     </section>
+    </LangContext.Provider>
   )
 }

@@ -1,0 +1,90 @@
+---
+import { AllWork, CTA, Footer, LandingInteractions, NavBar } from "../components";
+import { products, kindLabels } from "../data/products";
+import Layout from "../layouts/Layout.astro";
+
+interface Props {
+	lang: "es" | "en";
+}
+
+const { lang } = Astro.props;
+
+const site = Astro.site ?? new URL("https://infinitydev.agency");
+const alternates = { es: "/trabajos", en: "/en/trabajos" };
+const pageUrl = new URL(alternates[lang], site).toString();
+const homeUrl = new URL(lang === "en" ? "/en/" : "/", site).toString();
+
+const copy = {
+	es: {
+		title: "Todos los trabajos | Apps, sitios web y dashboards - Infinity Dev",
+		description:
+			"Apps móviles, sitios web y paneles de administración que Infinity Dev ha diseñado y construido, listados uno por uno con capturas y detalles.",
+		name: "Todos los trabajos de Infinity Dev",
+		home: "Inicio",
+		crumb: "Todos los trabajos",
+	},
+	en: {
+		title: "All work | Apps, websites and dashboards - Infinity Dev",
+		description:
+			"Mobile apps, websites and admin panels designed and built by Infinity Dev, listed one by one with screenshots and details.",
+		name: "All work by Infinity Dev",
+		home: "Home",
+		crumb: "All work",
+	},
+}[lang];
+
+const collectionJsonLd = {
+	"@context": "https://schema.org",
+	"@type": "CollectionPage",
+	"@id": `${pageUrl}#page`,
+	url: pageUrl,
+	name: copy.name,
+	inLanguage: lang === "en" ? "en" : "es-MX",
+	isPartOf: { "@id": new URL("/#website", site).toString() },
+	mainEntity: {
+		"@type": "ItemList",
+		numberOfItems: products.length,
+		itemListElement: products.map((product, index) => ({
+			"@type": "ListItem",
+			position: index + 1,
+			item: {
+				"@type": "CreativeWork",
+				name: product.name[lang],
+				description: product.summary[lang],
+				genre: kindLabels[product.kind][lang],
+				creator: { "@id": new URL("/#organization", site).toString() },
+				...(product.link ? { url: product.link.href } : {}),
+			},
+		})),
+	},
+};
+
+const breadcrumbJsonLd = {
+	"@context": "https://schema.org",
+	"@type": "BreadcrumbList",
+	itemListElement: [
+		{ "@type": "ListItem", position: 1, name: copy.home, item: homeUrl },
+		{ "@type": "ListItem", position: 2, name: copy.crumb, item: pageUrl },
+	],
+};
+---
+
+<Layout
+	lang={lang}
+	alternates={alternates}
+	title={copy.title}
+	description={copy.description}
+	canonical={alternates[lang]}
+	jsonLd={[collectionJsonLd, breadcrumbJsonLd]}
+>
+	<NavBar lang={lang} alternates={alternates} />
+
+	<main id="main">
+		<AllWork lang={lang} client:load />
+		<CTA />
+	</main>
+
+	<Footer lang={lang} />
+
+	<LandingInteractions client:load />
+</Layout>

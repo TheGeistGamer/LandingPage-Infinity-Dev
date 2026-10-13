@@ -1,0 +1,63 @@
+---
+import {
+	NavBar,
+	Hero,
+	LandingInteractions,
+	CTA,
+	Faq,
+	Footer,
+	Process,
+	Services,
+	Stats,
+	Work,
+} from "../components";
+import { faqs } from "../data/faq";
+import Layout from "../layouts/Layout.astro";
+
+interface Props {
+	lang: "es" | "en";
+}
+
+const { lang } = Astro.props;
+
+const faqJsonLd = {
+	"@context": "https://schema.org",
+	"@type": "FAQPage",
+	inLanguage: lang === "en" ? "en" : "es-MX",
+	mainEntity: faqs.map((item) => ({
+		"@type": "Question",
+		name: item.q[lang],
+		acceptedAnswer: { "@type": "Answer", text: item.a[lang] },
+	})),
+};
+
+const alternates = { es: "/", en: "/en/" };
+---
+
+<Layout
+	lang={lang}
+	alternates={alternates}
+	canonical={alternates[lang]}
+	jsonLd={[faqJsonLd]}
+>
+	<NavBar lang={lang} alternates={alternates} />
+
+	<main id="main">
+		<a id="top"></a>
+
+		<Hero />
+		<Stats />
+		<Services />
+		<Process />
+
+		<!-- Hidrata solo lo que tiene estado: el modal de proyectos -->
+		<Work lang={lang} client:load />
+
+		<Faq />
+		<CTA />
+	</main>
+
+	<Footer lang={lang} />
+
+	<LandingInteractions client:load />
+</Layout>

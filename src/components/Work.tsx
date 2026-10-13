@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { projects, type Project } from '../data/projects'
 import { ProjectModal } from './ProjectModal'
-import { T } from './i18n'
+import { LangContext, Lx, T, langPrefix, type Lang } from './i18n'
 
 const CardCover = ({ project }: { project: Project }) => (
   <div className={`work-cover ${project.cover[0].kind}`} aria-hidden="true">
@@ -18,25 +18,24 @@ const CardCover = ({ project }: { project: Project }) => (
   </div>
 )
 
-export const Work = () => {
+export const Work = ({ lang = 'es' }: { lang?: Lang }) => {
   const [openId, setOpenId] = useState<string | null>(null)
   const close = useCallback(() => setOpenId(null), [])
   const active = projects.find((p) => p.id === openId)
 
   return (
+    <LangContext.Provider value={lang}>
     <section className="sec" id="trabajo">
       <div className="wrap">
         <div className="sec-head reveal" suppressHydrationWarning>
           <span className="eyebrow">
-            <span data-es>Portafolio</span><span data-en>Selected work</span>
+            <Lx es={<>Portafolio</>} en={<>Selected work</>} />
           </span>
           <h2>
-            <span data-es>Proyectos pensados<br />al detalle.</span>
-            <span data-en>Projects crafted<br />down to the detail.</span>
+            <Lx es={<>Proyectos pensados<br />al detalle.</>} en={<>Projects crafted<br />down to the detail.</>} />
           </h2>
           <p>
-            <span data-es>Una muestra de lo que construimos. Toca un proyecto para ver cómo lo hicimos.</span>
-            <span data-en>A sample of what we build. Tap a project to see how we did it.</span>
+            <Lx es={<>Una muestra de lo que construimos. Toca un proyecto para ver cómo lo hicimos.</>} en={<>A sample of what we build. Tap a project to see how we did it.</>} />
           </p>
         </div>
 
@@ -56,7 +55,7 @@ export const Work = () => {
                 <h3><T t={p.title} /></h3>
                 <p><T t={p.summary} /></p>
                 <span className="work-more">
-                  <span data-es>Ver proyecto</span><span data-en>View project</span>
+                  <Lx es={<>Ver proyecto</>} en={<>View project</>} />
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M5 12h14M13 6l6 6-6 6" />
                   </svg>
@@ -68,10 +67,10 @@ export const Work = () => {
 
           <a href="#contacto" className="work bento-banner work-cta reveal d2" suppressHydrationWarning>
             <div className="work-meta">
-              <span className="tag"><span data-es>Tu proyecto</span><span data-en>Your project</span></span>
-              <h3><span data-es>El siguiente podría ser el tuyo.</span><span data-en>The next one could be yours.</span></h3>
+              <span className="tag"><Lx es={<>Tu proyecto</>} en={<>Your project</>} /></span>
+              <h3><Lx es={<>El siguiente podría ser el tuyo.</>} en={<>The next one could be yours.</>} /></h3>
               <span className="work-more">
-                <span data-es>Hablemos</span><span data-en>Let’s talk</span>
+                <Lx es={<>Hablemos</>} en={<>Let’s talk</>} />
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M5 12h14M13 6l6 6-6 6" />
                 </svg>
@@ -81,8 +80,8 @@ export const Work = () => {
         </div>
 
         <div className="work-all reveal" suppressHydrationWarning>
-          <a href="/trabajos" className="btn btn-ghost btn-lg">
-            <span data-es>Ver todos los trabajos</span><span data-en>View all work</span>
+          <a href={`${langPrefix(lang)}/trabajos`} className="btn btn-ghost btn-lg">
+            <Lx es={<>Ver todos los trabajos</>} en={<>View all work</>} />
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M5 12h14M13 6l6 6-6 6" />
             </svg>
@@ -92,5 +91,6 @@ export const Work = () => {
 
       {active && <ProjectModal project={active} onClose={close} />}
     </section>
+    </LangContext.Provider>
   )
 }
