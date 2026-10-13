@@ -7,6 +7,10 @@
 		"directory": "./dist",
 		"binding": "ASSETS"
 	},
+	"routes": [
+		{ "pattern": "infinitydev.agency", "custom_domain": true },
+		{ "pattern": "www.infinitydev.agency", "custom_domain": true }
+	],
 	"observability": {
 		"enabled": true
 	}
