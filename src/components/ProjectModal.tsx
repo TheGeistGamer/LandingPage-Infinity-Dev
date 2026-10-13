@@ -1,0 +1,133 @@
+import { useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
+import type { Detail } from '../data/projects'
+import { T, currentLang } from './i18n'
+
+export const ProjectModal = ({ project, onClose }: { project: Detail; onClose: () => void }) => {
+  const closeRef = useRef<HTMLButtonElement>(null)
+  const lang = currentLang()
+
+  useEffect(() => {
+    const previous = document.activeElement as HTMLElement | null
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    document.addEventListener('keydown', onKey)
+    document.body.style.overflow = 'hidden'
+    closeRef.current?.focus()
+
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = ''
+      previous?.focus()
+    }
+  }, [onClose])
+
+  const goContact = () => {
+    onClose()
+    window.setTimeout(() => {
+      document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' })
+    }, 50)
+  }
+
+  return createPortal(
+    <div className="pj-backdrop" onClick={onClose}>
+      <button ref={closeRef} className="pj-close" onClick={onClose} aria-label="Cerrar / Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+          <path d="M6 6l12 12M18 6L6 18" />
+        </svg>
+      </button>
+      <div
+        className="pj"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="pj-title"
+        onClick={(e) => e.stopPropagation()}
+      >
+
+        <header className="pj-head" style={{ background: project.tone }}>
+          <div className="pj-head-copy">
+            <span className="pj-tag"><T t={project.tag} /></span>
+            <h3 id="pj-title"><T t={project.title} /></h3>
+            <p><T t={project.intro} /></p>
+            {project.link && (
+              <a className="btn btn-light" href={project.link.href} target="_blank" rel="noopener noreferrer">
+                <T t={project.link.label} />
+              </a>
+            )}
+          </div>
+          <div className={`pj-head-art ${project.cover[0].kind}`} aria-hidden="true">
+            {project.cover.map((img, i) => (
+              <img key={img.src} src={img.src} alt="" className={`cv cv${i + 1} ${img.kind}`} />
+            ))}
+          </div>
+        </header>
+
+        <div className="pj-stats">
+          {project.stats.map((s) => (
+            <div key={s.n + s.label.es}>
+              <b>{s.n}</b>
+              <div className="lbl"><T t={s.label} /></div>
+            </div>
+          ))}
+        </div>
+
+        <div className="pj-body">
+          {project.articles.map((a, i) => (
+            <article key={a.title.es} className={`pj-art ${a.kind}${i % 2 ? ' flip' : ''}`}>
+              <figure>
+                <img src={a.image} alt={a.alt[lang]} loading="lazy" decoding="async" />
+              </figure>
+              <div className="pj-art-text">
+                <h4><T t={a.title} /></h4>
+                {a.text && <p><T t={a.text} /></p>}
+                {a.bullets && (
+                  <ul>
+                    {a.bullets.map((b) => (
+                      <li key={b.es}><T t={b} /></li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </article>
+          ))}
+
+          <section className="pj-services">
+            <h4><span data-es>Lo que entregamos</span><span data-en>What we delivered</span></h4>
+            <ul>
+              {project.services.map((s) => (
+                <li key={s.es}><T t={s} /></li>
+              ))}
+            </ul>
+          </section>
+
+          <details className="pj-tech">
+            <summary><span data-es>Ficha técnica</span><span data-en>Tech sheet</span></summary>
+            <dl>
+              {project.tech.map((r) => (
+                <div key={r.k.es}>
+                  <dt><T t={r.k} /></dt>
+                  <dd><T t={r.v} /></dd>
+                </div>
+              ))}
+            </dl>
+          </details>
+        </div>
+
+        <footer className="pj-cta">
+          <div>
+            <h4><span data-es>¿Tienes un proyecto en mente?</span><span data-en>Have a project in mind?</span></h4>
+            <p>
+              <span data-es>Cuéntanos tu idea y la convertimos en un producto como este.</span>
+              <span data-en>Tell us your idea and we will turn it into a product like this.</span>
+            </p>
+          </div>
+          <button className="btn btn-primary btn-lg" onClick={goContact}>
+            <span data-es>Cotiza tu proyecto</span><span data-en>Quote your project</span>
+          </button>
+        </footer>
+      </div>
+    </div>,
+    document.body,
+  )
+}

@@ -1,0 +1,20 @@
+---
+import { AllWork, CTA, Footer, LandingInteractions, NavBar } from "../components";
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+	title="Todos los trabajos - Infinity Dev"
+	description="Apps móviles, sitios web y paneles de administración que Infinity Dev ha diseñado y construido, listados uno por uno."
+	canonical="/trabajos"
+>
+	<NavBar client:only="react" />
+
+	<AllWork client:only="react" />
+
+	<CTA client:only="react" />
+
+	<Footer client:only="react" />
+
+	<LandingInteractions client:only="react" />
+</Layout>
