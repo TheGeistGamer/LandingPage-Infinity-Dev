@@ -421,7 +421,8 @@ body.en [data-en]{display:revert}
   .pj-head{grid-template-columns:1fr;padding:44px 28px 0}
   .pj-head-art{min-height:300px}
   .faq-wrap{grid-template-columns:1fr;gap:28px}
-  .cta-card{grid-template-columns:1fr;padding:40px}
+  .cta-card{grid-template-columns:minmax(0,1fr);padding:40px}
+  .cta-left,.form{min-width:0}
   .foot-grid{grid-template-columns:1fr 1fr;gap:32px}
   .nav-links{display:none}
   .burger{display:inline-flex}
@@ -439,9 +440,16 @@ body.en [data-en]{display:revert}
   .aw{padding-top:120px}
   .aw-item{grid-template-columns:1fr;gap:18px;padding:14px}
   .aw-body{padding:0 6px 8px}
-  .work{min-height:440px}
+  .work{min-height:0}
   .bento-banner{min-height:200px}
-  .work-meta{padding:24px}
+  .work-meta{padding:24px 24px 8px}
+  .work-cta .work-meta{padding:24px}
+  /* mobile: the cover sits below the text in its own band, with larger screenshots */
+  .bento .work-cover{position:relative;inset:auto;flex:none;height:clamp(240px,70vw,320px);margin-top:auto}
+  .bento .work .work-cover.phone .cv1{width:46%;right:46%;bottom:-34%}
+  .bento .work .work-cover.phone .cv2{width:46%;right:3%;bottom:-48%}
+  .bento .work .work-cover.wide .cv1{width:92%;right:-6%;bottom:-6%}
+  .bento .work .work-cover.wide .cv2{width:28%;right:4%;bottom:-24%}
   .pj-backdrop{padding:0}
   .pj{border-radius:0}
   .pj-close{top:14px;right:14px}
@@ -453,7 +461,14 @@ body.en [data-en]{display:revert}
   .pj-tech dl div{grid-template-columns:1fr;gap:2px}
   .pj-cta{padding:28px 22px}
   .foot-grid{grid-template-columns:1fr}
-  .cta-card{padding:28px}
+  .cta{padding-bottom:70px}
+  .cta-card{padding:32px 18px 18px;gap:32px;border-radius:26px}
+  .cta-left{padding:0 6px}
+  .cta-left h2{font-size:clamp(1.7rem,8vw,2.2rem)}
+  .cta-left p{font-size:1rem}
+  .form{padding:24px 18px;border-radius:18px}
+  .field input,.field select,.field textarea{font-size:16px;padding:14px}
+  .form .btn{padding-top:16px;padding-bottom:16px}
   .hero{padding:140px 0 70px}
   .float-card{display:none}
 }
