@@ -11,38 +11,40 @@ import {
 	Stats,
 	Work,
 } from "../components";
+import { faqs } from "../data/faq";
 import Layout from "../layouts/Layout.astro";
+
+const faqJsonLd = {
+	"@context": "https://schema.org",
+	"@type": "FAQPage",
+	inLanguage: "es-MX",
+	mainEntity: faqs.map((item) => ({
+		"@type": "Question",
+		name: item.q.es,
+		acceptedAnswer: { "@type": "Answer", text: item.a.es },
+	})),
+};
 ---
 
-<Layout>
-	<!-- ===== NAV ===== -->
-	<NavBar client:only="react" />
+<Layout jsonLd={[faqJsonLd]}>
+	<NavBar />
 
-	<a id="top"></a>
+	<main id="main">
+		<a id="top"></a>
 
-	<!-- ===== HERO ===== -->
-	<Hero client:only="react" />
+		<Hero />
+		<Stats />
+		<Services />
+		<Process />
 
-	<!-- ===== STATS ===== -->
-	<Stats client:only="react" />
+		<!-- Hidrata solo lo que tiene estado: el modal de proyectos -->
+		<Work client:load />
 
-	<!-- ===== SERVICES ===== -->
-	<Services client:only="react" />
+		<Faq />
+		<CTA />
+	</main>
 
-	<!-- ===== PROCESS ===== -->
-	<Process client:only="react" />
+	<Footer />
 
-	<!-- ===== WORK ===== -->
-	<Work client:only="react" />
-
-	<!-- ===== FAQ ===== -->
-	<Faq client:only="react" />
-
-	<!-- ===== CONTACT / CTA ===== -->
-	<CTA client:only="react" />
-
-	<!-- ===== FOOTER ===== -->
-	<Footer client:only="react" />
-
-	<LandingInteractions client:only="react" />
+	<LandingInteractions client:load />
 </Layout>

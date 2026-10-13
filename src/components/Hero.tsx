@@ -95,14 +95,14 @@ export const Hero = () => {
             <div className="mock">
               <div className="mock-bar">
                 <i></i><i></i><i></i><span className="mock-url"
-                >app.infinitydev.io</span>
+                >app.infinitydev.agency</span>
               </div>
               <div className="mock-body">
                 <div className="mock-row">
-                  <h4>
+                  <p className="mock-title">
                     <span data-es>Panel de control</span><span data-en
                     >Dashboard</span>
-                  </h4>
+                  </p>
                   <span className="mock-pill"
                   ><span data-es>En vivo</span><span data-en>Live</span></span
                   >

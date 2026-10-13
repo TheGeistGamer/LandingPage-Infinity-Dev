@@ -24,9 +24,9 @@ export const Process = () => {
         </div>
         <div className="steps">
           <div className="step reveal">
-            <span className="step-n">01</span><h4>
+            <span className="step-n">01</span><h3>
               <span data-es>Descubrimiento</span><span data-en>Discovery</span>
-            </h4><p>
+            </h3><p>
               <span data-es
               >Escuchamos tu idea, tus metas y a tus clientes para entender el
                 reto real.</span
@@ -36,9 +36,9 @@ export const Process = () => {
             </p>
           </div>
           <div className="step reveal d1">
-            <span className="step-n">02</span><h4>
+            <span className="step-n">02</span><h3>
               <span data-es>Diseño</span><span data-en>Design</span>
-            </h4><p>
+            </h3><p>
               <span data-es
               >Creamos una interfaz única y prototipos que puedes ver y tocar
                 antes de programar.</span
@@ -48,9 +48,9 @@ export const Process = () => {
             </p>
           </div>
           <div className="step reveal d2">
-            <span className="step-n">03</span><h4>
+            <span className="step-n">03</span><h3>
               <span data-es>Desarrollo</span><span data-en>Development</span>
-            </h4><p>
+            </h3><p>
               <span data-es
               >Construimos con código limpio y entregas frecuentes para que veas
                 avances reales.</span
@@ -60,9 +60,9 @@ export const Process = () => {
             </p>
           </div>
           <div className="step reveal d3">
-            <span className="step-n">04</span><h4>
+            <span className="step-n">04</span><h3>
               <span data-es>Lanzamiento</span><span data-en>Launch</span>
-            </h4><p>
+            </h3><p>
               <span data-es
               >Desplegamos en servidores seguros y dejamos todo listo para tus
                 usuarios.</span
@@ -72,9 +72,9 @@ export const Process = () => {
             </p>
           </div>
           <div className="step reveal d4">
-            <span className="step-n">05</span><h4>
+            <span className="step-n">05</span><h3>
               <span data-es>Soporte</span><span data-en>Support</span>
-            </h4><p>
+            </h3><p>
               <span data-es
               >Seguimos contigo: monitoreo, mejoras y nuevas funciones cuando
                 las necesites.</span

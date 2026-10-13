@@ -1,0 +1,51 @@
+---
+import { Footer, LandingInteractions, NavBar } from "../components";
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+	title="Página no encontrada - Infinity Dev"
+	description="La página que buscas no existe o cambió de lugar."
+	noindex={true}
+>
+	<NavBar />
+
+	<main id="main" class="nf">
+		<div class="wrap">
+			<span class="eyebrow">404</span>
+			<h1>Esta página no existe</h1>
+			<p>Puede que el enlace haya cambiado o esté mal escrito. Vuelve al inicio o revisa nuestros trabajos.</p>
+			<div class="nf-actions">
+				<a href="/" class="btn btn-primary btn-lg">Volver al inicio</a>
+				<a href="/trabajos" class="btn btn-ghost btn-lg">Ver todos los trabajos</a>
+			</div>
+		</div>
+	</main>
+
+	<Footer />
+
+	<LandingInteractions client:load />
+</Layout>
+
+<style is:global>
+	.nf {
+		padding: 190px 0 120px;
+		min-height: 70vh;
+	}
+	.nf h1 {
+		font-size: clamp(2.4rem, 5vw, 4rem);
+		margin-top: 18px;
+	}
+	.nf p {
+		color: var(--slate);
+		font-size: 1.12rem;
+		margin-top: 18px;
+		max-width: 32em;
+	}
+	.nf-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 14px;
+		margin-top: 32px;
+	}
+</style>

@@ -6,41 +6,73 @@ interface Props {
 	description?: string;
 	canonical?: string;
 	image?: string;
+	imageAlt?: string;
 	type?: 'website' | 'article';
 	noindex?: boolean;
+	/** Datos estructurados extra de la página (se suman a Organization y WebSite) */
+	jsonLd?: Record<string, unknown>[];
 }
 
+const SITE_NAME = 'Infinity Dev';
+const EMAIL = 'contacto@infinitydev.agency';
+
 const {
-	title = 'Infinity Dev - Software a tu medida',
-	description = 'Disenamos y construimos software a medida para negocios que necesitan aplicaciones web, apps moviles, servidores, dashboards y productos digitales listos para crecer.',
+	title = 'Infinity Dev | Desarrollo de software a medida, apps y dashboards',
+	description = 'Diseñamos y desarrollamos apps web y móviles, servidores y dashboards a la medida de tu negocio. Sin plantillas: producto propio, de la idea al lanzamiento.',
 	canonical,
-	image = '/logo_basic.webp',
+	image = '/og-image.jpg',
+	imageAlt = 'Infinity Dev: software único, hecho para tu historia',
 	type = 'website',
 	noindex = false,
+	jsonLd = [],
 } = Astro.props;
 
-const siteUrl = Astro.site ?? new URL('https://infinitydev.io');
+const siteUrl = Astro.site ?? new URL('https://infinitydev.agency');
 const canonicalUrl = new URL(canonical ?? Astro.url.pathname, siteUrl);
 const imageUrl = new URL(image, siteUrl);
-const locale = 'es_MX';
-const alternateLocale = 'en_US';
+const isDefaultImage = image === '/og-image.jpg';
 
-const organizationJsonLd = {
-	'@context': 'https://schema.org',
-	'@type': 'Organization',
-	name: 'Infinity Dev',
-	url: siteUrl.toString(),
-	logo: new URL('/logo-basic.svg', siteUrl).toString(),
-	description,
-	sameAs: [],
-	knowsAbout: [
-		'Desarrollo de software a medida',
-		'Aplicaciones web',
-		'Aplicaciones moviles',
-		'Backend',
-		'Dashboards empresariales',
-	],
-};
+const organizationId = new URL('/#organization', siteUrl).toString();
+
+const baseJsonLd = [
+	{
+		'@context': 'https://schema.org',
+		'@type': 'Organization',
+		'@id': organizationId,
+		name: SITE_NAME,
+		url: siteUrl.toString(),
+		logo: new URL('/logo_basic.webp', siteUrl).toString(),
+		image: new URL('/og-image.jpg', siteUrl).toString(),
+		description,
+		email: EMAIL,
+		contactPoint: [
+			{
+				'@type': 'ContactPoint',
+				contactType: 'sales',
+				email: EMAIL,
+				availableLanguage: ['es', 'en'],
+			},
+		],
+		knowsAbout: [
+			'Desarrollo de software a medida',
+			'Aplicaciones web',
+			'Aplicaciones móviles',
+			'Servidores y APIs',
+			'Dashboards empresariales',
+		],
+	},
+	{
+		'@context': 'https://schema.org',
+		'@type': 'WebSite',
+		'@id': new URL('/#website', siteUrl).toString(),
+		url: siteUrl.toString(),
+		name: SITE_NAME,
+		inLanguage: ['es-MX', 'en'],
+		publisher: { '@id': organizationId },
+	},
+];
+
+const structuredData = [...baseJsonLd, ...jsonLd];
 ---
 
 <!doctype html>
@@ -52,40 +84,60 @@ const organizationJsonLd = {
 
 		<title>{title}</title>
 		<meta name="description" content={description} />
-		<meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
-		<meta name="author" content="Infinity Dev" />
-		<meta name="creator" content="Infinity Dev" />
-		<meta name="publisher" content="Infinity Dev" />
-		<meta name="theme-color" content="#111827" />
-		<meta name="color-scheme" content="light" />
 		<meta
-			name="keywords"
-			content="desarrollo de software, software a medida, aplicaciones web, apps moviles, backend, dashboards, Infinity Dev"
+			name="robots"
+			content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'}
 		/>
+		<meta name="author" content={SITE_NAME} />
+		<meta name="publisher" content={SITE_NAME} />
+		<meta name="theme-color" content="#ffffff" />
+		<meta name="color-scheme" content="light" />
+		<meta name="format-detection" content="telephone=no" />
 
 		<link rel="canonical" href={canonicalUrl.toString()} />
+		<link rel="sitemap" type="application/xml" href="/sitemap.xml" />
 		<link rel="icon" type="image/svg+xml" href="/logo-basic.svg" />
 		<link rel="apple-touch-icon" href="/logo_basic.webp" />
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+		/>
 
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
 		<meta property="og:type" content={type} />
 		<meta property="og:url" content={canonicalUrl.toString()} />
 		<meta property="og:image" content={imageUrl.toString()} />
-		<meta property="og:image:alt" content="Logo de Infinity Dev" />
-		<meta property="og:site_name" content="Infinity Dev" />
-		<meta property="og:locale" content={locale} />
-		<meta property="og:locale:alternate" content={alternateLocale} />
+		{isDefaultImage && <meta property="og:image:width" content="1200" />}
+		{isDefaultImage && <meta property="og:image:height" content="630" />}
+		{isDefaultImage && <meta property="og:image:type" content="image/jpeg" />}
+		<meta property="og:image:alt" content={imageAlt} />
+		<meta property="og:site_name" content={SITE_NAME} />
+		<meta property="og:locale" content="es_MX" />
+		<meta property="og:locale:alternate" content="en_US" />
 
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:title" content={title} />
 		<meta name="twitter:description" content={description} />
 		<meta name="twitter:image" content={imageUrl.toString()} />
-		<meta name="twitter:image:alt" content="Logo de Infinity Dev" />
+		<meta name="twitter:image:alt" content={imageAlt} />
 
-		<script type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)} />
+		{structuredData.map((entry) => <script type="application/ld+json" set:html={JSON.stringify(entry)} />)}
+
+		<noscript>
+			<style>
+				.reveal {
+					opacity: 1 !important;
+					transform: none !important;
+				}
+			</style>
+		</noscript>
 	</head>
 	<body>
+		<a href="#main" class="skip-link">Saltar al contenido</a>
 		<slot />
 	</body>
 </html>
@@ -96,5 +148,23 @@ const organizationJsonLd = {
 		margin: 0;
 		width: 100%;
 		height: 100%;
+	}
+
+	.skip-link {
+		position: fixed;
+		top: 8px;
+		left: 8px;
+		z-index: 300;
+		padding: 10px 16px;
+		border-radius: 12px;
+		background: #171b24;
+		color: #fff;
+		font-weight: 700;
+		transform: translateY(-200%);
+		transition: transform 0.2s;
+	}
+
+	.skip-link:focus {
+		transform: none;
 	}
 </style>

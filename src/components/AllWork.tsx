@@ -78,10 +78,10 @@ export const AllWork = () => {
           <span className="eyebrow">
             <span data-es>Todos los trabajos</span><span data-en>All work</span>
           </span>
-          <h2>
+          <h1>
             <span data-es>Cada producto,<br />por separado.</span>
             <span data-en>Every product,<br />on its own.</span>
-          </h2>
+          </h1>
           <p>
             <span data-es>
               Apps, sitios y paneles que hemos construido, listados uno por uno. Abre cualquiera para ver el proyecto completo.
@@ -144,7 +144,7 @@ export const AllWork = () => {
                       <T t={project.title} />
                     </span>
                   </div>
-                  <h3><T t={product.name} /></h3>
+                  <h2><T t={product.name} /></h2>
                   <p><T t={product.summary} /></p>
                   <ul className="aw-tags">
                     {product.tags.map((tag) => (

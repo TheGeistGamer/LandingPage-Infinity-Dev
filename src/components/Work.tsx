@@ -26,7 +26,7 @@ export const Work = () => {
   return (
     <section className="sec" id="trabajo">
       <div className="wrap">
-        <div className="sec-head reveal">
+        <div className="sec-head reveal" suppressHydrationWarning>
           <span className="eyebrow">
             <span data-es>Portafolio</span><span data-en>Selected work</span>
           </span>
@@ -49,10 +49,11 @@ export const Work = () => {
               style={{ background: p.tone }}
               onClick={() => setOpenId(p.id)}
               aria-haspopup="dialog"
+              suppressHydrationWarning
             >
               <div className="work-meta">
                 <span className="tag"><T t={p.tag} /></span>
-                <h4><T t={p.title} /></h4>
+                <h3><T t={p.title} /></h3>
                 <p><T t={p.summary} /></p>
                 <span className="work-more">
                   <span data-es>Ver proyecto</span><span data-en>View project</span>
@@ -65,10 +66,10 @@ export const Work = () => {
             </button>
           ))}
 
-          <a href="#contacto" className="work bento-banner work-cta reveal d2">
+          <a href="#contacto" className="work bento-banner work-cta reveal d2" suppressHydrationWarning>
             <div className="work-meta">
               <span className="tag"><span data-es>Tu proyecto</span><span data-en>Your project</span></span>
-              <h4><span data-es>El siguiente podría ser el tuyo.</span><span data-en>The next one could be yours.</span></h4>
+              <h3><span data-es>El siguiente podría ser el tuyo.</span><span data-en>The next one could be yours.</span></h3>
               <span className="work-more">
                 <span data-es>Hablemos</span><span data-en>Let’s talk</span>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -79,7 +80,7 @@ export const Work = () => {
           </a>
         </div>
 
-        <div className="work-all reveal">
+        <div className="work-all reveal" suppressHydrationWarning>
           <a href="/trabajos" className="btn btn-ghost btn-lg">
             <span data-es>Ver todos los trabajos</span><span data-en>View all work</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
