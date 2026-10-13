@@ -21,6 +21,15 @@ const readUrl = (): { filter: Filter; page: number } => {
   }
 }
 
+/** El selector ES/EN conserva el filtro y la página al cambiar de idioma */
+const syncLangLinks = () => {
+  document.querySelectorAll<HTMLAnchorElement>('#lang a[data-lang]').forEach((link) => {
+    const url = new URL(link.getAttribute('href') ?? '/', window.location.origin)
+    url.search = window.location.search
+    link.setAttribute('href', `${url.pathname}${url.search}`)
+  })
+}
+
 const writeUrl = (filter: Filter, page: number) => {
   const params = new URLSearchParams()
   if (filter !== 'all') params.set('tipo', filter)
@@ -28,6 +37,7 @@ const writeUrl = (filter: Filter, page: number) => {
 
   const query = params.toString()
   window.history.replaceState(null, '', `${window.location.pathname}${query ? `?${query}` : ''}`)
+  syncLangLinks()
 }
 
 export const AllWork = ({ lang = 'es' }: { lang?: Lang }) => {
@@ -40,6 +50,7 @@ export const AllWork = ({ lang = 'es' }: { lang?: Lang }) => {
     const initial = readUrl()
     setFilter(initial.filter)
     setPage(initial.page)
+    syncLangLinks()
   }, [])
 
   const visible = useMemo(

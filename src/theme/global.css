@@ -367,6 +367,15 @@ header.nav{position:fixed;top:0;left:0;right:0;z-index:100;transition:all .35s v
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .form .btn{width:100%;justify-content:center;margin-top:6px}
 .form-note{font-size:.78rem;color:var(--muted);text-align:center;margin-top:12px}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.cf-turnstile{margin:6px 0 10px;min-height:65px}
+.form-error{display:none;margin:4px 0 12px;padding:12px 14px;border-radius:12px;background:#fdecec;border:1px solid #f5c2c0;color:#a12622;font-size:.9rem;line-height:1.45}
+.form-error.show{display:block}
+.form-error p[hidden]{display:none}
+.form .btn .btn-sending{display:none}
+.form .btn.sending .btn-label{display:none}
+.form .btn.sending .btn-sending{display:inline}
+.form .btn:disabled{opacity:.75;cursor:progress}
 .form-success{display:none;text-align:center;padding:30px 10px}
 .form-success.show{display:block}
 .form-success .ico{width:64px;height:64px;border-radius:50%;background:var(--grad);display:grid;place-items:center;margin:0 auto 18px}

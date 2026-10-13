@@ -15,6 +15,8 @@ interface Props {
 	lang?: 'es' | 'en';
 	/** Ruta equivalente en cada idioma, para <link rel="alternate" hreflang> */
 	alternates?: { es: string; en: string };
+	/** Carga Turnstile (antispam del formulario de contacto) */
+	forms?: boolean;
 }
 
 const SITE_NAME = 'Infinity Dev';
@@ -52,6 +54,7 @@ const {
 	type = 'website',
 	noindex = false,
 	jsonLd = [],
+	forms = true,
 } = Astro.props;
 
 const siteUrl = Astro.site ?? new URL('https://infinitydev.agency');
@@ -160,6 +163,8 @@ const structuredData = [...baseJsonLd, ...jsonLd];
 		<meta name="twitter:image:alt" content={imageAlt} />
 
 		{structuredData.map((entry) => <script type="application/ld+json" set:html={JSON.stringify(entry)} />)}
+
+		{forms && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer />}
 
 		<noscript>
 			<style>

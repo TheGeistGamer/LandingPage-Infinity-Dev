@@ -153,13 +153,69 @@ export const useLandingInteractions = () => {
       }
     };
 
-    const handleSubmit = (event: SubmitEvent) => {
+    const formStartedAt = performance.now();
+
+    const handleSubmit = async (event: SubmitEvent) => {
       const form = event.target instanceof HTMLFormElement ? event.target : null;
       if (form?.id !== 'quoteForm') return;
 
       event.preventDefault();
-      form.style.display = 'none';
-      document.getElementById('formSuccess')?.classList.add('show');
+
+      const errorBox = document.getElementById('formError');
+      const submit = document.getElementById('quoteSubmit') as HTMLButtonElement | null;
+      const showError = (kind: 'validation' | 'captcha' | 'server' | null) => {
+        errorBox?.classList.toggle('show', kind !== null);
+        errorBox?.querySelectorAll<HTMLElement>('p[data-kind]').forEach((line) => {
+          line.hidden = line.dataset.kind !== kind;
+        });
+      };
+
+      showError(null);
+
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const data = new FormData(form);
+      const payload = {
+        name: data.get('name'),
+        company: data.get('company'),
+        email: data.get('email'),
+        service: data.get('service'),
+        message: data.get('message'),
+        website: data.get('website'),
+        token: data.get('cf-turnstile-response'),
+        lang: document.documentElement.lang === 'en' ? 'en' : 'es',
+        elapsed: Math.round(performance.now() - formStartedAt),
+      };
+
+      submit?.classList.add('sending');
+      if (submit) submit.disabled = true;
+
+      try {
+        const response = await fetch('/api/contacto', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const result = (await response.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+
+        if (response.ok && result.ok) {
+          form.style.display = 'none';
+          document.getElementById('formSuccess')?.classList.add('show');
+          return;
+        }
+
+        showError(result.error === 'validation' ? 'validation' : result.error === 'captcha' ? 'captcha' : 'server');
+      } catch {
+        showError('server');
+      }
+
+      // Un token de Turnstile solo sirve una vez: se pide uno nuevo para reintentar
+      (window as unknown as { turnstile?: { reset: () => void } }).turnstile?.reset();
+      submit?.classList.remove('sending');
+      if (submit) submit.disabled = false;
     };
 
     const handleVisibilityChange = () => {
