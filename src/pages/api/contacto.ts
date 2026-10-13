@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro'
 import { env } from 'cloudflare:workers'
 import { CONTACT_FROM, CONTACT_TO, SEND_CONFIRMATION, SERVICES, type ServiceKey } from '../../data/site'
+import { confirmationEmail, ownerEmail } from '../../data/emailTemplates'
 
 // Esta ruta corre en el Worker en cada petición; el resto del sitio es estático
 export const prerender = false
@@ -12,9 +13,6 @@ const json = (body: Record<string, unknown>, status = 200) =>
     status,
     headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' },
   })
-
-const escapeHtml = (value: string) =>
-  value.replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char] as string)
 
 const clean = (value: unknown, max: number) =>
   typeof value === 'string' ? value.replace(/\r\n/g, '\n').trim().slice(0, max) : ''
@@ -48,61 +46,6 @@ const sendEmail = async (payload: Record<string, unknown>) => {
   }
 
   return true
-}
-
-const ownerEmail = (data: { name: string; company: string; email: string; service: string; message: string; lang: Lang }) => {
-  const rows: [string, string][] = [
-    ['Nombre', data.name],
-    ['Empresa', data.company || '—'],
-    ['Correo', data.email],
-    ['Servicio', data.service],
-    ['Idioma del sitio', data.lang === 'en' ? 'Inglés' : 'Español'],
-  ]
-
-  const html = `
-    <div style="font-family:system-ui,sans-serif;max-width:560px;color:#171b24">
-      <h2 style="margin:0 0 16px">Nueva solicitud de cotización</h2>
-      <table style="border-collapse:collapse;width:100%">
-        ${rows
-          .map(
-            ([label, value]) =>
-              `<tr><td style="padding:6px 12px 6px 0;color:#697586;white-space:nowrap">${label}</td><td style="padding:6px 0"><strong>${escapeHtml(value)}</strong></td></tr>`,
-          )
-          .join('')}
-      </table>
-      <p style="margin:20px 0 6px;color:#697586">Mensaje</p>
-      <p style="white-space:pre-wrap;background:#f7f8fb;padding:14px;border-radius:12px;margin:0">${escapeHtml(data.message)}</p>
-    </div>`
-
-  const text = `${rows.map(([label, value]) => `${label}: ${value}`).join('\n')}\n\nMensaje:\n${data.message}`
-
-  return { html, text }
-}
-
-const confirmationEmail = (name: string, lang: Lang) => {
-  const copy =
-    lang === 'en'
-      ? {
-          subject: 'We received your request — Infinity Dev',
-          hello: `Hi ${name},`,
-          body: 'Thanks for writing to us. We received your request and we will get back to you within 24 business hours.',
-          close: 'Talk soon,',
-        }
-      : {
-          subject: 'Recibimos tu solicitud — Infinity Dev',
-          hello: `Hola ${name},`,
-          body: 'Gracias por escribirnos. Recibimos tu solicitud y te responderemos en menos de 24 horas hábiles.',
-          close: 'Hablamos pronto,',
-        }
-
-  const html = `
-    <div style="font-family:system-ui,sans-serif;max-width:520px;color:#171b24;line-height:1.6">
-      <p>${escapeHtml(copy.hello)}</p>
-      <p>${copy.body}</p>
-      <p style="margin-top:24px">${copy.close}<br /><strong>Infinity Dev</strong><br /><a href="https://infinitydev.agency">infinitydev.agency</a></p>
-    </div>`
-
-  return { subject: copy.subject, html, text: `${copy.hello}\n\n${copy.body}\n\n${copy.close}\nInfinity Dev` }
 }
 
 export const POST: APIRoute = async ({ request }) => {
@@ -147,7 +90,7 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   const service = SERVICES[serviceKey].es
-  const owner = ownerEmail({ name, company, email, service, message, lang })
+  const owner = ownerEmail({ name, company, email, service, message, lang, receivedAt: new Date() })
 
   // En desarrollo, sin llave de Resend, solo se registra el mensaje para poder probar el formulario
   if (!env.RESEND_API_KEY && import.meta.env.DEV) {
@@ -172,7 +115,7 @@ export const POST: APIRoute = async ({ request }) => {
   if (!sent) return json({ ok: false, error: 'server' }, 502)
 
   if (SEND_CONFIRMATION) {
-    const confirmation = confirmationEmail(name, lang)
+    const confirmation = confirmationEmail({ name, service: SERVICES[serviceKey][lang], message, lang })
     // Si la confirmación falla no se le avisa al visitante: su solicitud ya llegó
     await sendEmail({
       from: CONTACT_FROM,
