@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig, sessionDrivers } from 'astro/config';
 
 import react from '@astrojs/react';
 
@@ -13,6 +13,11 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()]
+  },
+
+  // El sitio no usa sesiones: un driver en memoria evita que el adaptador pida un KV namespace
+  session: {
+    driver: sessionDrivers.memory()
   },
 
   adapter: cloudflare()

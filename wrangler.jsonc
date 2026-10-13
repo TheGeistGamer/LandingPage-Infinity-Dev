@@ -1,7 +1,7 @@
 {
 	"compatibility_date": "2026-06-14",
 	"compatibility_flags": ["global_fetch_strictly_public"],
-	"name": "infinity-landing",
+	"name": "landing-page-infinity-dev",
 	"main": "@astrojs/cloudflare/entrypoints/server",
 	"assets": {
 		"directory": "./dist",
