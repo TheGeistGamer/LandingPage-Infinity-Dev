@@ -1,5 +1,5 @@
 ---
-import { AllWork, CTA, Footer, LandingInteractions, NavBar } from "../components";
+import { AllWork, CTA, Footer, NavBar } from "../components";
 import { products, kindLabels } from "../data/products";
 import Layout from "../layouts/Layout.astro";
 
@@ -86,5 +86,8 @@ const breadcrumbJsonLd = {
 
 	<Footer lang={lang} />
 
-	<LandingInteractions client:load />
+	<script>
+		import { initLandingInteractions } from '../scripts/landingInteractions';
+		initLandingInteractions();
+	</script>
 </Layout>

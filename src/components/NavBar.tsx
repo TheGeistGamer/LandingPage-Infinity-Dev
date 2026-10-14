@@ -13,7 +13,7 @@ export const NavBar = ({ lang = 'es', alternates = { es: '/', en: '/en/' } }: Pr
     <header className="nav" id="nav">
       <div className="nav-inner">
         <a href={`${p}/#top`} className="brand">
-          <img src="/logo_basic.webp" alt="Infinity Dev" />
+          <img src="/logo-nav.webp" alt="" width={30} height={34} />
           <span className="brand-name">INFINITY <b className="grad-text">DEV</b></span>
         </a>
         <nav className="nav-links">
@@ -33,8 +33,8 @@ export const NavBar = ({ lang = 'es', alternates = { es: '/', en: '/en/' } }: Pr
         </nav>
         <div className="nav-right">
           <div className="lang" id="lang">
-            <a href={alternates.es} hrefLang="es" lang="es" data-lang="es" className={lang === 'es' ? 'active' : undefined} aria-label="Español" aria-current={lang === 'es' ? 'true' : undefined}>ES</a>
-            <a href={alternates.en} hrefLang="en" lang="en" data-lang="en" className={lang === 'en' ? 'active' : undefined} aria-label="English" aria-current={lang === 'en' ? 'true' : undefined}>EN</a>
+            <a href={alternates.es} hrefLang="es" lang="es" data-lang="es" className={lang === 'es' ? 'active' : undefined} title="Español" aria-current={lang === 'es' ? 'true' : undefined}>ES</a>
+            <a href={alternates.en} hrefLang="en" lang="en" data-lang="en" className={lang === 'en' ? 'active' : undefined} title="English" aria-current={lang === 'en' ? 'true' : undefined}>EN</a>
           </div>
           <a href={`${p}/#contacto`} className="btn btn-primary nav-cta">
             <span data-es>Cotizar</span><span data-en>Get a quote</span>

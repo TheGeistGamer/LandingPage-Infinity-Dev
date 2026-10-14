@@ -1,5 +1,5 @@
 ---
-import { Footer, LandingInteractions, NavBar } from "../components";
+import { Footer, NavBar } from "../components";
 import Layout from "../layouts/Layout.astro";
 ---
 
@@ -25,7 +25,10 @@ import Layout from "../layouts/Layout.astro";
 
 	<Footer />
 
-	<LandingInteractions client:load />
+	<script>
+		import { initLandingInteractions } from '../scripts/landingInteractions';
+		initLandingInteractions();
+	</script>
 </Layout>
 
 <style is:global>

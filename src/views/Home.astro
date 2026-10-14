@@ -2,7 +2,6 @@
 import {
 	NavBar,
 	Hero,
-	LandingInteractions,
 	CTA,
 	Faq,
 	Footer,
@@ -51,7 +50,7 @@ const alternates = { es: "/", en: "/en/" };
 		<Process />
 
 		<!-- Hidrata solo lo que tiene estado: el modal de proyectos -->
-		<Work lang={lang} client:load />
+		<Work lang={lang} client:visible />
 
 		<Faq />
 		<CTA />
@@ -59,5 +58,8 @@ const alternates = { es: "/", en: "/en/" };
 
 	<Footer lang={lang} />
 
-	<LandingInteractions client:load />
+	<script>
+		import { initLandingInteractions } from '../scripts/landingInteractions';
+		initLandingInteractions();
+	</script>
 </Layout>

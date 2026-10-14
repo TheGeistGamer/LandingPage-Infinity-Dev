@@ -7,7 +7,7 @@
   --ink:#15192180;       /* fallback overridden below */
   --ink:#171b24;
   --slate:#3a4452;
-  --muted:#697586;
+  --muted:#5b6676;
   --line:#e7e9ee;
   --bg:#ffffff;
   --bg-soft:#f7f8fb;
@@ -71,7 +71,7 @@ header.nav{position:fixed;top:0;left:0;right:0;z-index:100;transition:all .35s v
 }
 .nav.scrolled .nav-inner{box-shadow:0 14px 40px -18px rgba(45,30,80,.25);background:rgba(255,255,255,.9)}
 .brand{display:flex;align-items:center;gap:11px;flex-shrink:0}
-.brand img{width:34px;height:34px}
+.brand img{width:auto;height:34px}
 .brand-name{font-family:'Space Grotesk';font-weight:700;font-size:1.06rem;letter-spacing:.02em;white-space:nowrap}
 .brand-name b{font-weight:700}
 .nav-links{display:flex;gap:6px;margin-left:auto}
@@ -140,7 +140,7 @@ header.nav{position:fixed;top:0;left:0;right:0;z-index:100;transition:all .35s v
 .mock-body{padding:22px}
 .mock-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
 .mock-title{font-family:'Space Grotesk',system-ui,sans-serif;font-weight:600;letter-spacing:-.02em;font-size:1.05rem}
-.mock-pill{font-size:.7rem;font-weight:700;color:#1e9e57;background:#e7f7ee;padding:5px 11px;border-radius:999px;font-family:'Space Grotesk'}
+.mock-pill{font-size:.7rem;font-weight:700;color:#137a43;background:#e7f7ee;padding:5px 11px;border-radius:999px;font-family:'Space Grotesk'}
 .mock-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
 .kpi{background:var(--bg-soft);border-radius:14px;padding:14px}
 .kpi .n{font-family:'Space Grotesk';font-weight:700;font-size:1.5rem}
@@ -405,7 +405,7 @@ footer{border-top:1px solid var(--line);padding:60px 0 40px}
 .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px}
 .foot-brand .brand{margin-bottom:16px}
 .foot-brand p{color:var(--muted);font-size:.95rem;max-width:24em}
-.foot-col h5{font-family:'Space Grotesk';font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:16px}
+.foot-col h3{font-family:'Space Grotesk';font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:16px}
 .foot-col a{display:block;color:var(--slate);font-size:.95rem;padding:6px 0;transition:color .2s}
 .foot-col a:hover{color:var(--violet)}
 .foot-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:50px;padding-top:28px;border-top:1px solid var(--line);color:var(--muted);font-size:.88rem;flex-wrap:wrap;gap:14px}
@@ -449,7 +449,7 @@ body.en [data-en]{display:revert}
   .nav-inner{margin:10px 12px 0;gap:10px;padding:7px 7px 7px 12px}
   .brand{gap:8px}
   .brand-name{font-size:.9rem}
-  .brand img{width:30px;height:30px}
+  .brand img{width:auto;height:30px}
   .nav-right{margin-left:auto;gap:8px}
   .lang{background:var(--bg-soft);border-color:transparent;padding:3px}
   .lang a{border-radius:999px;padding:6px 10px}
@@ -500,9 +500,15 @@ body.en [data-en]{display:revert}
 @media(max-width:400px){
   .nav-inner{padding:6px 6px 6px 10px;gap:6px}
   .brand-name{font-size:.8rem}
-  .brand img{width:32px;height:32px}
+  .brand img{width:auto;height:32px}
   .nav-right{gap:6px}
   .nav-cta{padding:9px 14px;font-size:.82rem}
   .burger{width:38px;height:38px}
   .lang a{padding:6px 9px;font-size:.76rem}
 }
+
+/* hero: enters on pure CSS (no JS wait) so it paints right away and doesn't delay LCP */
+.hero .reveal{opacity:1;transform:none;animation:heroIn .8s var(--ease) both}
+.hero .reveal.d1{animation-delay:.05s}.hero .reveal.d2{animation-delay:.1s}.hero .reveal.d3{animation-delay:.15s}.hero .reveal.d4{animation-delay:.2s}
+@keyframes heroIn{from{transform:translateY(18px)}to{transform:none}}
+@media (prefers-reduced-motion:reduce){.hero .reveal{animation:none}}

@@ -17,9 +17,10 @@ export const Footer = ({ lang = 'es' }: { lang?: Lang }) => {
           <div className="foot-brand">
             <a href={`${p}/#top`} className="brand">
               <img
-                src="/logo_basic.webp"
-                alt="Infinity Dev"
-                style={{ width: '38px', height: '38px' }}
+                src="/logo-nav.webp"
+                alt=""
+                width={34}
+                height={38}
               />
               <span className="brand-name">INFINITY <b className="grad-text">DEV</b></span
               >
@@ -34,7 +35,7 @@ export const Footer = ({ lang = 'es' }: { lang?: Lang }) => {
             </p>
           </div>
           <div className="foot-col">
-            <h5><span data-es>Servicios</span><span data-en>Services</span></h5>
+            <h3><span data-es>Servicios</span><span data-en>Services</span></h3>
             <a href={`${p}/#servicios`}
             ><span data-es>Aplicaciones web</span><span data-en>Web apps</span
             ></a
@@ -49,7 +50,7 @@ export const Footer = ({ lang = 'es' }: { lang?: Lang }) => {
             <a href={`${p}/#servicios`}>Dashboards</a>
           </div>
           <div className="foot-col">
-            <h5><span data-es>Empresa</span><span data-en>Company</span></h5>
+            <h3><span data-es>Empresa</span><span data-en>Company</span></h3>
             <a href={`${p}/#proceso`}
             ><span data-es>Proceso</span><span data-en>Process</span></a
             >
@@ -65,7 +66,7 @@ export const Footer = ({ lang = 'es' }: { lang?: Lang }) => {
             >
           </div>
           <div className="foot-col">
-            <h5><span data-es>Contacto</span><span data-en>Contact</span></h5>
+            <h3><span data-es>Contacto</span><span data-en>Contact</span></h3>
             <a href="mailto:contacto@infinitydev.agency">contacto@infinitydev.agency</a>
             <a href={`${p}/#contacto`}
             ><span data-es>Cotizar proyecto</span><span data-en

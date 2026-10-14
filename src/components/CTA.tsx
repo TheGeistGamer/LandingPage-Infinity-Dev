@@ -71,29 +71,29 @@ export const CTA = () => {
               </p>
               <div className="field-row">
                 <div className="field">
-                  <label
+                  <label htmlFor="q-name"
                   ><span data-es>Nombre</span><span data-en>Name</span></label
-                  ><input type="text" name="name" required minLength={2} maxLength={100} autoComplete="name" placeholder="Ana Pérez" />
+                  ><input type="text" id="q-name" name="name" required minLength={2} maxLength={100} autoComplete="name" placeholder="Ana Pérez" />
                 </div>
                 <div className="field">
-                  <label
+                  <label htmlFor="q-company"
                   ><span data-es>Empresa</span><span data-en>Company</span
                   ></label
-                  ><input type="text" name="company" maxLength={100} autoComplete="organization" placeholder="Acme Inc." />
+                  ><input type="text" id="q-company" name="company" maxLength={100} autoComplete="organization" placeholder="Acme Inc." />
                 </div>
               </div>
               <div className="field">
-                <label
+                <label htmlFor="q-email"
                 ><span data-es>Correo</span><span data-en>Email</span></label
-                ><input type="email" name="email" required maxLength={200} autoComplete="email" placeholder="ana@empresa.com" />
+                ><input type="email" id="q-email" name="email" required maxLength={200} autoComplete="email" placeholder="ana@empresa.com" />
               </div>
               <div className="field">
-                <label
+                <label htmlFor="q-service"
                 ><span data-es>¿Qué necesitas?</span><span data-en
                 >What do you need?</span
                   ></label
                 >
-                <select name="service" required>
+                <select id="q-service" name="service" required>
                   <option
                     value=""
                     data-es-text="Selecciona un servicio"
@@ -115,11 +115,11 @@ export const CTA = () => {
                 </select>
               </div>
               <div className="field">
-                <label
+                <label htmlFor="q-message"
                 ><span data-es>Cuéntanos tu idea</span><span data-en
                 >Tell us your idea</span
                   ></label
-                ><textarea name="message" required minLength={10} maxLength={3000} placeholder="..."></textarea>
+                ><textarea id="q-message" name="message" required minLength={10} maxLength={3000} placeholder="..."></textarea>
               </div>
               <div className="hp" aria-hidden="true">
                 <label>
