@@ -13,8 +13,8 @@ export const CTA = () => {
             ><span data-es>Hablemos</span><span data-en>Let's talk</span></span
             >
             <h2 style={{ marginTop: '16px' }}>
-              <span data-es>Cuéntanos tu idea.<br />Te respondemos en 24 h.</span
-              ><span data-en>Tell us your idea.<br />We reply within 24 h.</span>
+              <span data-es>Cuéntanos tu idea.<br />Te respondemos en&nbsp;24&nbsp;h.</span
+              ><span data-en>Tell us your idea.<br />We reply within&nbsp;24&nbsp;h.</span>
             </h2>
             <p>
               <span data-es

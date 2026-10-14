@@ -1,4 +1,7 @@
 import React from 'react'
+import { projects } from '../data/projects'
+
+const initials = (name: string) => name.replace(/[^\p{L}\s]/gu, ' ').split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase()
 
 export const Hero = () => {
   return (
@@ -57,7 +60,11 @@ export const Hero = () => {
             </a>
           </div>
           <div className="hero-trust reveal d4">
-            <div className="dots"><i></i><i></i><i></i><i></i></div>
+            <div className="dots" aria-hidden="true">
+              {projects.filter((p) => !p.id.endsWith('-landing')).slice(0, 4).map((p) => (
+                <i key={p.id} style={{ background: p.tone }}>{initials(p.title.es)}</i>
+              ))}
+            </div>
             <span data-es>Confían en nosotros equipos que quieren crecer</span>
             <span data-en>Trusted by teams ready to grow</span>
           </div>
